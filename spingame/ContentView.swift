@@ -55,14 +55,16 @@ struct ContentView: View {
     Table(value: 36, color: .red ,ismoney: 0),
     ]
     @State private var chips=[
+    Chip(value: 0, color: .gray),
     Chip(value: 1, color: .gray),
-    Chip(value: 5, color: .purple),
+    Chip(value: 5, color: .white),
     Chip(value: 10, color: .blue),
-    Chip(value: 50, color: Color.orange)
+    Chip(value: 50, color: .orange)
     ]
     
-    @State private var betAmount: Int = 0
-    @State private var balance:   Int = 100000
+    @State private var balance:   Int = 1000
+    @State private var betChose = Chip(value: 0, color: .gray)
+    @State private var tabChose = 0;
         var body: some View {
             let howBig = 45
             ZStack {
@@ -77,6 +79,7 @@ struct ContentView: View {
                                 .foregroundColor(.white)
                                 .frame(width: CGFloat(howBig), height: 2*CGFloat(howBig))
                                 .background(Color.green)
+                                .border(Color.black, width: 2)
                                 .onTapGesture {
                                     
                                 }
@@ -85,6 +88,7 @@ struct ContentView: View {
                                 .foregroundColor(.white)
                                 .frame(width: CGFloat(howBig), height: CGFloat(howBig))
                                 .background(Color.green)
+                                .border(Color.black, width: 2)
                                 .onTapGesture {
                                     
                                 }
@@ -93,7 +97,7 @@ struct ContentView: View {
                         ForEach(0..<12){index in
                             VStack(spacing: 0){
                                 ForEach(0..<3){jdex in
-                                    let now=tables[index*3+2-jdex]
+                                    var now=tables[index*3+2-jdex]
                                     ZStack(){
                                         
                                         Text("\(now.value)")
@@ -101,19 +105,20 @@ struct ContentView: View {
                                             .foregroundColor(.white)
                                             .frame(width: CGFloat(howBig), height: CGFloat(howBig))
                                             .background(now.color)
-                                            .border(Color.white, width: 1)
+                                            .border(Color.black, width: 2)
                                             .onTapGesture {
-                                                
+                                                tabChose=now.value;
                                             }
-                                        if now.ismoney > 0 {
+                                            
+                                        if tabChose == now.value {
                                             Image(systemName:"circle")
                                                 .resizable()
                                                 .frame(width: CGFloat(howBig), height: CGFloat(howBig))
                                                 
                                                 .scaledToFit()
-                                                .foregroundColor(.yellow)
-                                            Text("\(betAmount)")
-                                                .font(.title3)
+                                                .foregroundColor(betChose.color)
+                                            Text("\(betChose.value)")
+                                                .font(.title2)
                                                 .foregroundColor(.yellow)
                                         }
                                         
@@ -129,6 +134,7 @@ struct ContentView: View {
                                     .foregroundColor(.white)
                                     .frame(width: CGFloat(howBig), height: CGFloat(howBig))
                                     .background(Color.green)
+                                    .border(Color.black, width: 2)
                                     .onTapGesture {
                                         
                                     }
@@ -145,6 +151,7 @@ struct ContentView: View {
                                 .foregroundColor(.white)
                                 .frame(width: CGFloat(4*howBig), height: CGFloat(howBig))
                                 .background(Color.green)
+                                .border(Color.black, width: 2)
                                 .onTapGesture {
                                     
                                 }
@@ -159,6 +166,7 @@ struct ContentView: View {
                             .foregroundColor(.white)
                             .frame(width: CGFloat(2*howBig), height: CGFloat(howBig))
                             .background(Color.green)
+                            .border(Color.black, width: 2)
                             .onTapGesture {
                                 
                             }
@@ -167,6 +175,7 @@ struct ContentView: View {
                             .foregroundColor(.white)
                             .frame(width: CGFloat(2*howBig), height: CGFloat(howBig))
                             .background(Color.green)
+                            .border(Color.black, width: 2)
                             .onTapGesture {
                         
                             }
@@ -175,7 +184,7 @@ struct ContentView: View {
                             .foregroundColor(.black)
                             .frame(width: CGFloat(2*howBig), height: CGFloat(howBig))
                             .background(Color.red)
-                            .clipShape(Rectangle())
+                            .border(Color.black, width: 2)
                             .onTapGesture {
                                 
                             }
@@ -184,7 +193,7 @@ struct ContentView: View {
                             .foregroundColor(.white)
                             .frame(width: CGFloat(2*howBig), height: CGFloat(howBig))
                             .background(Color.black)
-                            .clipShape(Rectangle())
+                            .border(Color.black, width: 2)
                             .onTapGesture {
                                 
                             }
@@ -194,7 +203,8 @@ struct ContentView: View {
                             .foregroundColor(.white)
                             .frame(width: CGFloat(2*howBig), height: CGFloat(howBig))
                             .background(Color.green)
-                            
+                            .border(Color.black, width: 2)
+                            .border(Color.black, width: 2)
                             .onTapGesture {
                                 
                             }
@@ -203,27 +213,66 @@ struct ContentView: View {
                             .foregroundColor(.white)
                             .frame(width: CGFloat(2*howBig), height: CGFloat(howBig))
                             .background(Color.green)
+                            .border(Color.black, width: 2)
+                            .border(Color.black, width: 2)
                             .onTapGesture {
                                 
                             }
                         
                     }
+                    
                     HStack(){
-                        Text("你有的錢錢:\(balance)")
-                            .fixedSize()
-                            .foregroundColor(.black)
-                            .frame(width: CGFloat(3*howBig), height: CGFloat(2*howBig))
-                            .onTapGesture {
+                        VStack{
+                            HStack{
+                                Text("你有的錢錢:\(balance)")
+                                    .fixedSize()
+                                    .foregroundColor(.black)
+                                    .frame(width: CGFloat(3*howBig), height: CGFloat(2*howBig))
+                                    .onTapGesture {
+                                        
+                                    }
+                                Text("你下注的金額:\(betChose.value)")
+                                    .fixedSize()
+                                    .foregroundColor(.black)
+                                    .frame(width: CGFloat(3*howBig), height: CGFloat(2*howBig))
+                                    .onTapGesture {
+                                        
+                                    }
                                 
                             }
-                        Text("你下注的金額:\(betAmount)")
-                            .fixedSize()
-                            .foregroundColor(.black)
-                            .frame(width: CGFloat(3*howBig), height: CGFloat(2*howBig))
-                            .onTapGesture {
+                            HStack{
+                                Text("restart")
+                                    .fixedSize()
+                                    .foregroundColor(.black)
+                                    .frame(width: CGFloat(2*howBig), height: CGFloat(howBig))
+                                    .background(Color.red)
+                                    .cornerRadius(100)
+                                    .onTapGesture {
+                                        
+                                    }
+                                Text("red")
+                                    .fixedSize()
+                                    .foregroundColor(.black)
+                                    .frame(width: CGFloat(2*howBig), height: CGFloat(howBig))
+                                    .background(Color.red)
+                                    .cornerRadius(100)
+                                    .onTapGesture {
+                                        
+                                    }
+                                Text("Spin")
+                                    .fixedSize()
+                                    .foregroundColor(.black)
+                                    .frame(width: CGFloat(2*howBig), height: CGFloat(howBig))
+                                    .background(Color.green)
+                                    .cornerRadius(100)
+                                    .onTapGesture {
+                                        
+                                    }
                                 
                             }
-                        ForEach(0..<4){ i in
+                            
+                        }
+                        ForEach(1..<5){ i in
                             ZStack{
                                 Image(systemName:"circle")
                                     .resizable()
@@ -232,7 +281,7 @@ struct ContentView: View {
                                     .scaledToFit()
                                     .foregroundColor(chips[i].color)
                                     .onTapGesture {
-                                        betAmount=chips[i].value
+                                        betChose=chips[i]
                                     }
                                 Text("\(chips[i].value)")
                                     .font(.title3)
