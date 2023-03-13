@@ -56,7 +56,7 @@ struct ContentView: View {
     ]
     @State private var chips=[
     Chip(value: 1, color: .gray),
-    Chip(value: 5, color: .white),
+    Chip(value: 5, color: .purple),
     Chip(value: 10, color: .blue),
     Chip(value: 50, color: Color.orange)
     ]
@@ -72,7 +72,6 @@ struct ContentView: View {
                 VStack(spacing: 0){
                     HStack(spacing: 0){
                         VStack{
-                            
                             Text("00")
                                 .fixedSize()
                                 .foregroundColor(.white)
