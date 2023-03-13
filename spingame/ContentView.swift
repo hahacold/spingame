@@ -22,12 +22,12 @@ struct ContentView: View {
     Table(value: 3, color: .red ,ismoney: 0),
     Table(value: 4, color: .black ,ismoney: 0),
     Table(value: 5, color: .red ,ismoney: 0),
-    Table(value: 6, color: .black ,ismoney: 1),
+    Table(value: 6, color: .black ,ismoney: 0),
     Table(value: 7, color: .red ,ismoney: 0),
     Table(value: 8, color: .black ,ismoney: 0),
     Table(value: 9, color: .red ,ismoney: 0),
     Table(value: 10, color: .black ,ismoney: 0),
-    Table(value: 11, color: .black ,ismoney: 1),
+    Table(value: 11, color: .black ,ismoney: 0),
     Table(value: 12, color: .red ,ismoney: 0),
     Table(value: 13, color: .black ,ismoney: 0),
     Table(value: 14, color: .red ,ismoney: 0),
@@ -49,20 +49,20 @@ struct ContentView: View {
     Table(value: 30, color: .red ,ismoney: 0),
     Table(value: 31, color: .black ,ismoney: 0),
     Table(value: 32, color: .red ,ismoney: 0),
-    Table(value: 33, color: .black ,ismoney: 1),
+    Table(value: 33, color: .black ,ismoney: 0),
     Table(value: 34, color: .red ,ismoney: 0),
     Table(value: 35, color: .black ,ismoney: 0),
     Table(value: 36, color: .red ,ismoney: 0),
     Table(value: 37, color: .purple ,ismoney: 0),
     Table(value: 38, color: .purple ,ismoney: 0),
     Table(value: 39, color: .purple ,ismoney: 0),
-    Table(value: 40, color: .purple ,ismoney: 1),
+    Table(value: 40, color: .purple ,ismoney: 0),
     Table(value: 41, color: .purple ,ismoney: 0),
     Table(value: 42, color: .purple ,ismoney: 0),
     Table(value: 43, color: .purple ,ismoney: 0),
     Table(value: 44, color: .purple ,ismoney: 0),
     Table(value: 45, color: .purple ,ismoney: 0),
-    Table(value: 46, color: .purple ,ismoney: 1),
+    Table(value: 46, color: .purple ,ismoney: 0),
     Table(value: 47, color: .purple ,ismoney: 0),
     Table(value: 48, color: .purple ,ismoney: 0),
     Table(value: 49, color: .purple ,ismoney: 0),
@@ -75,14 +75,120 @@ struct ContentView: View {
     Chip(value: 10, color: .blue),
     Chip(value: 50, color: .orange)
     ]
-    
+    var to46Set = Set([3,6,9,12,15,18,21,24,27,30,33,36])
+    var to47Set = Set([2,5,8,11,14,17,20,23,26,29,32,35])
+    var to48Set = Set([1,4,7,10,13,16,19,22,25,28,31,34])
     @State private var balance:   Int = 1000
     @State private var betChose = Chip(value: 0, color: .gray)
     @State private var tabChose = 0;
-    @State var  randSpin = 0;
+    @State var  randSpin = -1;
     func clear(){
         tabChose=0
         betChose = Chip(value: 0, color: .gray)
+    }
+    func countStart(){
+        var  win = 0
+        if tabChose >= 1 && tabChose <= 36{
+            if(tabChose==randSpin){
+                balance+=betChose.value*35
+                win = 1
+            }
+        }else if tabChose == 37{
+            if randSpin == 37{
+                balance+=betChose.value*2
+                win = 1
+            }
+        }
+        else if tabChose == 38{
+            if randSpin == 0{
+                balance+=betChose.value*2
+                win = 1
+            }
+        }
+        else if tabChose == 39{
+            if to46Set.contains(randSpin){
+                balance+=betChose.value*2
+                win = 1
+            }
+        }
+        else if tabChose == 40{
+            if to47Set.contains(randSpin){
+                balance+=betChose.value*2
+                win = 1
+            }
+        }
+        else if tabChose == 41{
+            if to48Set.contains(randSpin){
+                balance+=betChose.value*2
+                win = 1
+            }
+        }
+        else if tabChose == 42{
+            if randSpin >= 1 && randSpin <= 12{
+                balance+=betChose.value*2
+                win = 1
+            }
+                
+        }
+        else if tabChose == 43{
+            if randSpin >= 13 && randSpin <= 24{
+                balance+=betChose.value*2
+                win = 1
+            }
+        }
+        else if tabChose == 44{
+            if randSpin >= 25 && randSpin <= 36{
+                balance+=betChose.value*2
+                win = 1
+            }
+        }
+        else if tabChose == 45{
+            if randSpin >= 1 && randSpin <= 18{
+                balance+=betChose.value
+                win = 1
+            }
+        }
+        else if tabChose == 46{
+            if randSpin%2==0 {
+                balance+=betChose.value
+                win = 1
+            }
+        }
+        else if tabChose == 47{
+            if tables[randSpin].color == .black{
+                balance+=betChose.value
+                win = 1
+            }
+        }
+        else if tabChose == 48{
+            if tables[randSpin].color == .red{
+                balance+=betChose.value
+                win = 1
+            }
+        }
+        else if tabChose == 49{
+            if randSpin%2==1 {
+                balance+=betChose.value
+                win = 1
+            }
+        }
+        else if tabChose == 50{
+            if randSpin >= 19 && randSpin <= 36{
+                balance+=betChose.value
+                win = 1
+            }
+        }
+        else{
+            win=0
+            
+        }
+        if(win==0){
+            balance-=betChose.value
+        }
+        if(balance<=0){
+            //gameover()
+        }
+        
     }
         var body: some View {
             let howBig = 45
@@ -208,91 +314,184 @@ struct ContentView: View {
                     
                     HStack(spacing: 0){
                         ForEach(1..<4){ i in
-                            Text("\(i)st 12")
-                                .fixedSize()
-                                .foregroundColor(.white)
-                                .frame(width: CGFloat(4*howBig), height: CGFloat(howBig))
-                                .background(Color.green)
-                                .border(Color.black, width: 2)
-                                .onTapGesture {
-                                    
+                            ZStack{
+                                Text("\(i)st 12")
+                                    .fixedSize()
+                                    .foregroundColor(.white)
+                                    .frame(width: CGFloat(4*howBig), height: CGFloat(howBig))
+                                    .background(Color.green)
+                                    .border(Color.black, width: 2)
+                                    .onTapGesture {
+                                        tabChose = 41+i
+                                    }
+                                if tabChose == 41+i && betChose.value>0 {
+                                    Image(systemName:"circle")
+                                        .resizable()
+                                        .frame(width: CGFloat(howBig), height: CGFloat(howBig))
+                                        
+                                        .scaledToFit()
+                                        .foregroundColor(betChose.color)
+                                    Text("\(betChose.value)")
+                                        .font(.title2)
+                                        .foregroundColor(.yellow)
                                 }
+                            }
+                            
                         }
                     }
                         
                     
                     HStack(spacing: 0){
+                        ZStack{
+                            Text("1 - 18")
+                                .fixedSize()
+                                .foregroundColor(.white)
+                                .frame(width: CGFloat(2*howBig), height: CGFloat(howBig))
+                                .background(Color.green)
+                                .border(Color.black, width: 2)
+                                .onTapGesture {
+                                    tabChose = 45
+                                }
+                            if tabChose == 45 && betChose.value>0 {
+                                Image(systemName:"circle")
+                                    .resizable()
+                                    .frame(width: CGFloat(howBig), height: CGFloat(howBig))
+                                    
+                                    .scaledToFit()
+                                    .foregroundColor(betChose.color)
+                                Text("\(betChose.value)")
+                                    .font(.title2)
+                                    .foregroundColor(.yellow)
+                            }
+                        }
                         
-                        Text("1 - 18")
-                            .fixedSize()
-                            .foregroundColor(.white)
-                            .frame(width: CGFloat(2*howBig), height: CGFloat(howBig))
-                            .background(Color.green)
-                            .border(Color.black, width: 2)
-                            .onTapGesture {
-                                
+                        ZStack{
+                            Text("Even")
+                                .fixedSize()
+                                .foregroundColor(.white)
+                                .frame(width: CGFloat(2*howBig), height: CGFloat(howBig))
+                                .background(Color.green)
+                                .border(Color.black, width: 2)
+                                .onTapGesture {
+                                    tabChose = 46
+                                }
+                            if tabChose == 46 && betChose.value>0 {
+                                Image(systemName:"circle")
+                                    .resizable()
+                                    .frame(width: CGFloat(howBig), height: CGFloat(howBig))
+                                    
+                                    .scaledToFit()
+                                    .foregroundColor(betChose.color)
+                                Text("\(betChose.value)")
+                                    .font(.title2)
+                                    .foregroundColor(.yellow)
                             }
-                        Text("Even")
-                            .fixedSize()
-                            .foregroundColor(.white)
-                            .frame(width: CGFloat(2*howBig), height: CGFloat(howBig))
-                            .background(Color.green)
-                            .border(Color.black, width: 2)
-                            .onTapGesture {
-                        
+
+                        }
+                        ZStack{
+                            Text("red")
+                                .fixedSize()
+                                .foregroundColor(.black)
+                                .frame(width: CGFloat(2*howBig), height: CGFloat(howBig))
+                                .background(Color.red)
+                                .border(Color.black, width: 2)
+                                .onTapGesture {
+                                    tabChose = 47
+                                }
+                            if tabChose == 47 && betChose.value>0 {
+                                Image(systemName:"circle")
+                                    .resizable()
+                                    .frame(width: CGFloat(howBig), height: CGFloat(howBig))
+                                    
+                                    .scaledToFit()
+                                    .foregroundColor(betChose.color)
+                                Text("\(betChose.value)")
+                                    .font(.title2)
+                                    .foregroundColor(.yellow)
                             }
-                        Text("red")
-                            .fixedSize()
-                            .foregroundColor(.black)
-                            .frame(width: CGFloat(2*howBig), height: CGFloat(howBig))
-                            .background(Color.red)
-                            .border(Color.black, width: 2)
-                            .onTapGesture {
-                                
+                        }
+                        ZStack{
+                            Text("black")
+                                .fixedSize()
+                                .foregroundColor(.white)
+                                .frame(width: CGFloat(2*howBig), height: CGFloat(howBig))
+                                .background(Color.black)
+                                .border(Color.black, width: 2)
+                                .onTapGesture {
+                                    tabChose = 48
+                                }
+                            if tabChose == 48 && betChose.value>0 {
+                                Image(systemName:"circle")
+                                    .resizable()
+                                    .frame(width: CGFloat(howBig), height: CGFloat(howBig))
+                                    
+                                    .scaledToFit()
+                                    .foregroundColor(betChose.color)
+                                Text("\(betChose.value)")
+                                    .font(.title2)
+                                    .foregroundColor(.yellow)
                             }
-                        Text("black")
-                            .fixedSize()
-                            .foregroundColor(.white)
-                            .frame(width: CGFloat(2*howBig), height: CGFloat(howBig))
-                            .background(Color.black)
-                            .border(Color.black, width: 2)
-                            .onTapGesture {
-                                
+                        }
+                        ZStack{
+                            Text("Odd")
+                                .fixedSize()
+                                .foregroundColor(.white)
+                                .frame(width: CGFloat(2*howBig), height: CGFloat(howBig))
+                                .background(Color.green)
+                                .border(Color.black, width: 2)
+                                .border(Color.black, width: 2)
+                                .onTapGesture {
+                                    tabChose = 49
+                                }
+                            if tabChose == 49 && betChose.value>0 {
+                                Image(systemName:"circle")
+                                    .resizable()
+                                    .frame(width: CGFloat(howBig), height: CGFloat(howBig))
+                                    
+                                    .scaledToFit()
+                                    .foregroundColor(betChose.color)
+                                Text("\(betChose.value)")
+                                    .font(.title2)
+                                    .foregroundColor(.yellow)
                             }
-                        Text("Odd")
-                            .fixedSize()
-                            .foregroundColor(.white)
-                            .frame(width: CGFloat(2*howBig), height: CGFloat(howBig))
-                            .background(Color.green)
-                            .border(Color.black, width: 2)
-                            .border(Color.black, width: 2)
-                            .onTapGesture {
-                                
+                        }
+                        ZStack{
+                            Text("19 - 36")
+                                .fixedSize()
+                                .foregroundColor(.white)
+                                .frame(width: CGFloat(2*howBig), height: CGFloat(howBig))
+                                .background(Color.green)
+                                .border(Color.black, width: 2)
+                                .border(Color.black, width: 2)
+                                .onTapGesture {
+                                    tabChose = 50
+                                }
+                            if tabChose == 50 && betChose.value>0 {
+                                Image(systemName:"circle")
+                                    .resizable()
+                                    .frame(width: CGFloat(howBig), height: CGFloat(howBig))
+                                    
+                                    .scaledToFit()
+                                    .foregroundColor(betChose.color)
+                                Text("\(betChose.value)")
+                                    .font(.title2)
+                                    .foregroundColor(.yellow)
                             }
-                        Text("19 - 36")
-                            .fixedSize()
-                            .foregroundColor(.white)
-                            .frame(width: CGFloat(2*howBig), height: CGFloat(howBig))
-                            .background(Color.green)
-                            .border(Color.black, width: 2)
-                            .border(Color.black, width: 2)
-                            .onTapGesture {
-                                
-                            }
+                        }
                         
                     }
                     
                     HStack(){
                         VStack{
                             HStack{
-                                Text("你有的錢錢:\(balance)")
+                                Text("你有的錢錢:\(balance)-\(betChose.value)")
                                     .fixedSize()
                                     .foregroundColor(.black)
                                     .frame(width: CGFloat(3*howBig), height: CGFloat(howBig))
                                     .onTapGesture {
                                         
                                     }
-                                Text("你下注的金額:\(betChose.value)")
+                                Text("你輸或贏了:\(balance-1000)")
                                     .fixedSize()
                                     .foregroundColor(.black)
                                     .frame(width: CGFloat(3*howBig), height: CGFloat(howBig))
@@ -338,18 +537,56 @@ struct ContentView: View {
                                     .cornerRadius(100)
                                     .onTapGesture {
                                         if betChose.value>0{
-                                            randSpin = .random(in: 1...36)
+                                            randSpin = .random(in: 0...37)
+                                            countStart()
+                                            
+                                            clear()
                                         }
                                         
-                                    }
-                                Text("\(randSpin)!!")
-                                    .fixedSize()
-                                    .foregroundColor(.black)
-                                    .frame(width: CGFloat(3*howBig), height: CGFloat(2*howBig))
-                                    .font(.system(size: 60))
-                                    .onTapGesture {
+                        
                                         
                                     }
+                                if(randSpin>=1 && randSpin<=36){
+                                    Text("\(randSpin)!!")
+                                        .fixedSize()
+                                        .foregroundColor(.black)
+                                        .frame(width: CGFloat(3*howBig), height: CGFloat(2*howBig))
+                                        .font(.system(size: 60))
+                                        .onTapGesture {
+                                            
+                                        }
+                                }
+                                else if(randSpin==0){
+                                    Text("\(randSpin)!!")
+                                        .fixedSize()
+                                        .foregroundColor(.black)
+                                        .frame(width: CGFloat(3*howBig), height: CGFloat(2*howBig))
+                                        .font(.system(size: 60))
+                                        .onTapGesture {
+                                            
+                                        }
+                                }
+                                else if(randSpin==37){
+                                    Text("00!!")
+                                        .fixedSize()
+                                        .foregroundColor(.black)
+                                        .frame(width: CGFloat(3*howBig), height: CGFloat(2*howBig))
+                                        .font(.system(size: 60))
+                                        .onTapGesture {
+                                            
+                                        }
+                                }
+                                else{
+                                    Text("還沒!!")
+                                        .fixedSize()
+                                        .foregroundColor(.black)
+                                        .frame(width: CGFloat(3*howBig), height: CGFloat(2*howBig))
+                                        .font(.system(size: 60))
+                                        .onTapGesture {
+                                            
+                                        }
+                                }
+                                
                             }
                             
                         }
@@ -372,7 +609,9 @@ struct ContentView: View {
                                         .resizable()
                                         .frame(width: CGFloat(2*howBig+15), height: CGFloat(2*howBig+15))
                                         .scaledToFit()
-                                        .foregroundColor(.black)                                }
+                                        .foregroundColor(.black)
+                                    
+                                }
                             }
                             
                         }
