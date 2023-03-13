@@ -53,6 +53,20 @@ struct ContentView: View {
     Table(value: 34, color: .red ,ismoney: 0),
     Table(value: 35, color: .black ,ismoney: 0),
     Table(value: 36, color: .red ,ismoney: 0),
+    Table(value: 37, color: .purple ,ismoney: 0),
+    Table(value: 38, color: .purple ,ismoney: 0),
+    Table(value: 39, color: .purple ,ismoney: 0),
+    Table(value: 40, color: .purple ,ismoney: 1),
+    Table(value: 41, color: .purple ,ismoney: 0),
+    Table(value: 42, color: .purple ,ismoney: 0),
+    Table(value: 43, color: .purple ,ismoney: 0),
+    Table(value: 44, color: .purple ,ismoney: 0),
+    Table(value: 45, color: .purple ,ismoney: 0),
+    Table(value: 46, color: .purple ,ismoney: 1),
+    Table(value: 47, color: .purple ,ismoney: 0),
+    Table(value: 48, color: .purple ,ismoney: 0),
+    Table(value: 49, color: .purple ,ismoney: 0),
+    Table(value: 50, color: .purple ,ismoney: 0),
     ]
     @State private var chips=[
     Chip(value: 0, color: .gray),
@@ -65,6 +79,11 @@ struct ContentView: View {
     @State private var balance:   Int = 1000
     @State private var betChose = Chip(value: 0, color: .gray)
     @State private var tabChose = 0;
+    @State var  randSpin = 0;
+    func clear(){
+        tabChose=0
+        betChose = Chip(value: 0, color: .gray)
+    }
         var body: some View {
             let howBig = 45
             ZStack {
@@ -73,25 +92,54 @@ struct ContentView: View {
                         
                 VStack(spacing: 0){
                     HStack(spacing: 0){
-                        VStack{
-                            Text("00")
-                                .fixedSize()
-                                .foregroundColor(.white)
-                                .frame(width: CGFloat(howBig), height: 2*CGFloat(howBig))
-                                .background(Color.green)
-                                .border(Color.black, width: 2)
-                                .onTapGesture {
-                                    
+                        VStack(spacing: 0){
+                            ZStack{
+                                Text("00")
+                                    .fixedSize()
+                                    .foregroundColor(.white)
+                                    .frame(width: CGFloat(howBig), height: 2*CGFloat(howBig))
+                                    .background(Color.green)
+                                    .border(Color.black, width: 2)
+                                    .onTapGesture {
+                                        tabChose = 37
+                                    }
+                                if tabChose == 37 && betChose.value>0 {
+                                    Image(systemName:"circle")
+                                        .resizable()
+                                        .frame(width: CGFloat(howBig), height: CGFloat(howBig))
+                                        
+                                        .scaledToFit()
+                                        .foregroundColor(betChose.color)
+                                    Text("\(betChose.value)")
+                                        .font(.title2)
+                                        .foregroundColor(.yellow)
                                 }
-                            Text("0")
-                                .fixedSize()
-                                .foregroundColor(.white)
-                                .frame(width: CGFloat(howBig), height: CGFloat(howBig))
-                                .background(Color.green)
-                                .border(Color.black, width: 2)
-                                .onTapGesture {
-                                    
+                                
+                            }
+                            
+                            ZStack{
+                                Text("0")
+                                    .fixedSize()
+                                    .foregroundColor(.white)
+                                    .frame(width: CGFloat(howBig), height: CGFloat(howBig))
+                                    .background(Color.green)
+                                    .border(Color.black, width: 2)
+                                    .onTapGesture {
+                                        tabChose = 38
+                                    }
+                                if tabChose == 38 && betChose.value>0 {
+                                    Image(systemName:"circle")
+                                        .resizable()
+                                        .frame(width: CGFloat(howBig), height: CGFloat(howBig))
+                                        
+                                        .scaledToFit()
+                                        .foregroundColor(betChose.color)
+                                    Text("\(betChose.value)")
+                                        .font(.title2)
+                                        .foregroundColor(.yellow)
                                 }
+                                
+                            }
                         }
                         
                         ForEach(0..<12){index in
@@ -110,7 +158,7 @@ struct ContentView: View {
                                                 tabChose=now.value;
                                             }
                                             
-                                        if tabChose == now.value {
+                                        if tabChose == now.value && betChose.value>0 {
                                             Image(systemName:"circle")
                                                 .resizable()
                                                 .frame(width: CGFloat(howBig), height: CGFloat(howBig))
@@ -127,17 +175,31 @@ struct ContentView: View {
                                 }
                             }
                         }
-                        VStack{
+                        VStack(spacing: 0){
                             ForEach(0..<3){ i in
-                                Text("2to1")
-                                    .fixedSize()
-                                    .foregroundColor(.white)
-                                    .frame(width: CGFloat(howBig), height: CGFloat(howBig))
-                                    .background(Color.green)
-                                    .border(Color.black, width: 2)
-                                    .onTapGesture {
-                                        
+                                ZStack{
+                                    Text("2to1")
+                                        .fixedSize()
+                                        .foregroundColor(.white)
+                                        .frame(width: CGFloat(howBig), height: CGFloat(howBig))
+                                        .background(Color.green)
+                                        .border(Color.black, width: 2)
+                                        .onTapGesture {
+                                            tabChose=39+i
+                                        }
+                                    if tabChose == 39+i && betChose.value>0 {
+                                        Image(systemName:"circle")
+                                            .resizable()
+                                            .frame(width: CGFloat(howBig), height: CGFloat(howBig))
+                                            
+                                            .scaledToFit()
+                                            .foregroundColor(betChose.color)
+                                        Text("\(betChose.value)")
+                                            .font(.title2)
+                                            .foregroundColor(.yellow)
                                     }
+                                }
+                                
                             }
                             
                         }
@@ -199,7 +261,6 @@ struct ContentView: View {
                             }
                         Text("Odd")
                             .fixedSize()
-                            .font(.footnote)
                             .foregroundColor(.white)
                             .frame(width: CGFloat(2*howBig), height: CGFloat(howBig))
                             .background(Color.green)
@@ -227,17 +288,25 @@ struct ContentView: View {
                                 Text("你有的錢錢:\(balance)")
                                     .fixedSize()
                                     .foregroundColor(.black)
-                                    .frame(width: CGFloat(3*howBig), height: CGFloat(2*howBig))
+                                    .frame(width: CGFloat(3*howBig), height: CGFloat(howBig))
                                     .onTapGesture {
                                         
                                     }
                                 Text("你下注的金額:\(betChose.value)")
                                     .fixedSize()
                                     .foregroundColor(.black)
-                                    .frame(width: CGFloat(3*howBig), height: CGFloat(2*howBig))
+                                    .frame(width: CGFloat(3*howBig), height: CGFloat(howBig))
                                     .onTapGesture {
                                         
                                     }
+                                Text("隨機數字來了:")
+                                    .fixedSize()
+                                    .foregroundColor(.black)
+                                    .frame(width: CGFloat(3*howBig), height: CGFloat(howBig))
+                                    .onTapGesture {
+                                        
+                                    }
+                                
                                 
                             }
                             HStack{
@@ -248,16 +317,18 @@ struct ContentView: View {
                                     .background(Color.red)
                                     .cornerRadius(100)
                                     .onTapGesture {
-                                        
+                                        balance=1000
+                                        clear()
+                                        randSpin = 0
                                     }
-                                Text("red")
+                                Text("clear")
                                     .fixedSize()
                                     .foregroundColor(.black)
                                     .frame(width: CGFloat(2*howBig), height: CGFloat(howBig))
-                                    .background(Color.red)
+                                    .background(Color.yellow)
                                     .cornerRadius(100)
                                     .onTapGesture {
-                                        
+                                        clear();
                                     }
                                 Text("Spin")
                                     .fixedSize()
@@ -266,9 +337,19 @@ struct ContentView: View {
                                     .background(Color.green)
                                     .cornerRadius(100)
                                     .onTapGesture {
+                                        if betChose.value>0{
+                                            randSpin = .random(in: 1...36)
+                                        }
                                         
                                     }
-                                
+                                Text("\(randSpin)!!")
+                                    .fixedSize()
+                                    .foregroundColor(.black)
+                                    .frame(width: CGFloat(3*howBig), height: CGFloat(2*howBig))
+                                    .font(.system(size: 60))
+                                    .onTapGesture {
+                                        
+                                    }
                             }
                             
                         }
@@ -286,6 +367,12 @@ struct ContentView: View {
                                 Text("\(chips[i].value)")
                                     .font(.title3)
                                     .foregroundColor(.yellow)
+                                if betChose.value == chips[i].value {
+                                    Image(systemName:"circle")
+                                        .resizable()
+                                        .frame(width: CGFloat(2*howBig+15), height: CGFloat(2*howBig+15))
+                                        .scaledToFit()
+                                        .foregroundColor(.black)                                }
                             }
                             
                         }
