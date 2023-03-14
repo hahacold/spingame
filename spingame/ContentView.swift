@@ -84,131 +84,172 @@ struct ContentView: View {
     var to46Set = Set([3,6,9,12,15,18,21,24,27,30,33,36])
     var to47Set = Set([2,5,8,11,14,17,20,23,26,29,32,35])
     var to48Set = Set([1,4,7,10,13,16,19,22,25,28,31,34])
-    @State private var balance:   Int = 10000
+    @State private var balance:   Int = 100//10000
     @State private var betChose = Chip(value: 0, color: .gray)
     @State private var tabChose = 0;
     @State private var bettime = 0;
+    @State private var gameover = 0;
     @State var  randSpin = -1;
     @State var  startBet = 0;
     @State private var prebetChose = Chip(value: 0, color: .gray)
-        
-        
+    @State var  waiting=0;
+    
     func clear(){
         
         for i in (1...50){
             tables[i].ismoney=0;
         }
         bettime=0
+        randSpin = -1
         betChose = Chip(value: 0, color: .gray)
+    }
+    func bettimecount(){
+        var c=0
+        for i in (1...50){
+            c+=tables[i].ismoney
+        }
+        bettime=c
+        
     }
     func countStart(){
         var wintime=0;
-        var  win = 0
-        if tabChose >= 1 && tabChose <= 36{
-            if(tabChose==randSpin){
-                balance+=betChose.value*35
+ 
+        ////
+        for i in 1...36{
+            if(tables[i].ismoney>0){
+                if(i==randSpin){
+                    wintime += 35
+                }
+                else{
+                    wintime -= 1
+                }
+            }
+        }
+        if(tables[37].ismoney>0){
+            if randSpin == 37{
+                wintime += 2
+            }
+            else{
+                wintime -= 1
+            }
+        }
+        if(tables[38].ismoney>0){
+            if randSpin == 0{
+                wintime += 2
+            }
+            else{
+                wintime -= 1
+            }
+        }
+        if(tables[39].ismoney>0){
+            if to46Set.contains(randSpin){
+                wintime += 2
+            }
+            else{
+                wintime -= 1
+            }
+        }
+        if(tables[40].ismoney>0){
+            if to47Set.contains(randSpin){
+                wintime += 2
+            }
+            else{
+                wintime -= 1
+            }
+        }
+        if(tables[41].ismoney>0){
+            if to48Set.contains(randSpin){
+                wintime += 2
+            }
+            else{
+                wintime -= 1
+            }
+        }
+        if(tables[42].ismoney>0){
+            if randSpin >= 1 && randSpin <= 12{
+                wintime += 2
+            }
+            else{
+                wintime -= 1
+            }
+        }
+        if(tables[43].ismoney>0){
+            if randSpin >= 13 && randSpin <= 24{
+                wintime += 2
+            }
+            else{
+                wintime -= 1
+            }
+        }
+        if(tables[44].ismoney>0){
+            if randSpin >= 25 && randSpin <= 36{
+                wintime += 2
+            }
+            else{
+                wintime -= 1
+            }
+        }
+        if(tables[45].ismoney>0){
+            if randSpin >= 1 && randSpin <= 18{
                 wintime += 1
             }
             else{
-                wintime-=1;
-            }
-        }else if tabChose == 37{
-            if randSpin == 37{
-                balance+=betChose.value*2
-                win = 1
+                wintime -= 1
             }
         }
-        else if tabChose == 38{
-            if randSpin == 0{
-                balance+=betChose.value*2
-                win = 1
-            }
-        }
-        else if tabChose == 39{
-            if to46Set.contains(randSpin){
-                balance+=betChose.value*2
-                win = 1
-            }
-        }
-        else if tabChose == 40{
-            if to47Set.contains(randSpin){
-                balance+=betChose.value*2
-                win = 1
-            }
-        }
-        else if tabChose == 41{
-            if to48Set.contains(randSpin){
-                balance+=betChose.value*2
-                win = 1
-            }
-        }
-        else if tabChose == 42{
-            if randSpin >= 1 && randSpin <= 12{
-                balance+=betChose.value*2
-                win = 1
-            }
-                
-        }
-        else if tabChose == 43{
-            if randSpin >= 13 && randSpin <= 24{
-                balance+=betChose.value*2
-                win = 1
-            }
-        }
-        else if tabChose == 44{
-            if randSpin >= 25 && randSpin <= 36{
-                balance+=betChose.value*2
-                win = 1
+        if(tables[46].ismoney>0){
+            if randSpin%2==0{
+                wintime += 1
             }
             else{
-                
+                wintime -= 1
             }
         }
-        else if tabChose == 45{
-            if randSpin >= 1 && randSpin <= 18{
-                balance+=betChose.value
-                win = 1
-            }
-        }
-        else if tabChose == 46{
-            if randSpin%2==0 {
-                balance+=betChose.value
-                win = 1
-            }
-        }
-        else if tabChose == 47{
+        if(tables[47].ismoney>0){
             if tables[randSpin].color == .black{
-                balance+=betChose.value
-                win = 1
+                wintime += 1
+            }
+            else{
+                wintime -= 1
             }
         }
-        else if tabChose == 48{
+        if(tables[48].ismoney>0){
             if tables[randSpin].color == .red{
-                balance+=betChose.value
-                win = 1
+                wintime += 1
+            }
+            else{
+                wintime -= 1
             }
         }
-        else if tabChose == 49{
-            if randSpin%2==1 {
-                balance+=betChose.value
-                win = 1
+        if(tables[49].ismoney>0){
+            if randSpin%2==1{
+                wintime += 1
+            }
+            else{
+                wintime -= 1
             }
         }
-        else if tabChose == 50{
+        if(tables[50].ismoney>0){
             if randSpin >= 19 && randSpin <= 36{
-                balance+=betChose.value
-                win = 1
+                wintime += 1
+            }
+            else{
+                wintime -= 1
             }
         }
-        else{
-            win=0
-            
-        }
-        if(win==0){
-            balance-=betChose.value
-        }
+        
+        
+        
+//        else if tabChose == 50{
+//            if randSpin >= 19 && randSpin <= 36{
+//                balance+=betChose.value
+//                win = 1
+//            }
+//        }
+        balance+=betChose.value*(wintime)
+
         if(balance<=0){
-            //gameover()
+            gameover=1;
         }
         
     }
@@ -231,7 +272,7 @@ struct ContentView: View {
                                     .onTapGesture {
                                         if betChose.value>0{
                                             tables[37].ismoney=1;
-                                            bettime+=1;
+                                            bettimecount()
                                         }
                                     }
                                 if tables[37].ismoney==1 && betChose.value>0 {
@@ -258,7 +299,7 @@ struct ContentView: View {
                                     .onTapGesture {
                                         if betChose.value>0{
                                             tables[38].ismoney=1;
-                                            bettime+=1;
+                                            bettimecount()
                                         }
                                     }
                                 if tables[38].ismoney==1 && betChose.value>0 {
@@ -291,7 +332,7 @@ struct ContentView: View {
                                             .onTapGesture {
                                                 if betChose.value>0{
                                                     tables[index*3+3-jdex].ismoney=1;
-                                                    bettime+=1;
+                                                    bettimecount()
                                                 }
                                             }
                                             
@@ -324,7 +365,7 @@ struct ContentView: View {
                                         .onTapGesture {
                                             if betChose.value>0{
                                                 tables[39+i].ismoney=1;
-                                                bettime+=1;
+                                                bettimecount()
                                             }
                                         }
                                     if tables[39+i].ismoney==1 && betChose.value>0 {
@@ -358,7 +399,7 @@ struct ContentView: View {
                                     .onTapGesture {
                                         if betChose.value>0{
                                             tables[41+i].ismoney=1;
-                                            bettime+=1;
+                                            bettimecount()
                                         }
                                     }
                                 if tables[41+i].ismoney==1 && betChose.value>0 {
@@ -387,9 +428,12 @@ struct ContentView: View {
                                 .background(Color.green)
                                 .border(Color.black, width: 2)
                                 .onTapGesture {
-                                    tabChose = 45
+                                    if betChose.value>0{
+                                        tables[45].ismoney=1;
+                                        bettimecount()
+                                    }
                                 }
-                            if tabChose == 45 && betChose.value>0 {
+                            if tables[45].ismoney==1 && betChose.value>0 {
                                 Image(systemName:"circle.fill")
                                     .resizable()
                                     .frame(width: CGFloat(howBig), height: CGFloat(howBig))
@@ -410,9 +454,12 @@ struct ContentView: View {
                                 .background(Color.green)
                                 .border(Color.black, width: 2)
                                 .onTapGesture {
-                                    tabChose = 46
+                                    if betChose.value>0{
+                                        tables[46].ismoney=1;
+                                        bettimecount()
+                                    }
                                 }
-                            if tabChose == 46 && betChose.value>0 {
+                            if tables[46].ismoney==1 && betChose.value>0 {
                                 Image(systemName:"circle.fill")
                                     .resizable()
                                     .frame(width: CGFloat(howBig), height: CGFloat(howBig))
@@ -433,9 +480,12 @@ struct ContentView: View {
                                 .background(Color.red)
                                 .border(Color.black, width: 2)
                                 .onTapGesture {
-                                    tabChose = 47
+                                    if betChose.value>0{
+                                        tables[47].ismoney=1;
+                                        bettimecount()
+                                    }
                                 }
-                            if tabChose == 47 && betChose.value>0 {
+                            if tables[47].ismoney==1 && betChose.value>0 {
                                 Image(systemName:"circle.fill")
                                     .resizable()
                                     .frame(width: CGFloat(howBig), height: CGFloat(howBig))
@@ -455,9 +505,12 @@ struct ContentView: View {
                                 .background(Color.black)
                                 .border(Color.black, width: 2)
                                 .onTapGesture {
-                                    tabChose = 48
+                                    if betChose.value>0{
+                                        tables[48].ismoney=1;
+                                        bettimecount()
+                                    }
                                 }
-                            if tabChose == 48 && betChose.value>0 {
+                            if tables[48].ismoney==1 && betChose.value>0 {
                                 Image(systemName:"circle.fill")
                                     .resizable()
                                     .frame(width: CGFloat(howBig), height: CGFloat(howBig))
@@ -478,9 +531,12 @@ struct ContentView: View {
                                 .border(Color.black, width: 2)
                                 .border(Color.black, width: 2)
                                 .onTapGesture {
-                                    tabChose = 49
+                                    if betChose.value>0{
+                                        tables[49].ismoney=1;
+                                        bettimecount()
+                                    }
                                 }
-                            if tabChose == 49 && betChose.value>0 {
+                            if tables[49].ismoney==1 && betChose.value>0 {
                                 Image(systemName:"circle.fill")
                                     .resizable()
                                     .frame(width: CGFloat(howBig), height: CGFloat(howBig))
@@ -501,9 +557,12 @@ struct ContentView: View {
                                 .border(Color.black, width: 2)
                                 .border(Color.black, width: 2)
                                 .onTapGesture {
-                                    tabChose = 50
+                                    if betChose.value>0{
+                                        tables[50].ismoney=1;
+                                        bettimecount()
+                                    }
                                 }
-                            if tabChose == 50 && betChose.value>0 {
+                            if tables[50].ismoney==1 && betChose.value>0 {
                                 Image(systemName:"circle.fill")
                                     .resizable()
                                     .frame(width: CGFloat(howBig), height: CGFloat(howBig))
@@ -553,7 +612,7 @@ struct ContentView: View {
                                     .background(Color.red)
                                     .cornerRadius(100)
                                     .onTapGesture {
-                                        balance=1000
+                                        balance=10000
                                         clear()
                                         randSpin = -1
                                         startBet=0;
@@ -587,43 +646,58 @@ struct ContentView: View {
                                                 
                                             }
                                     }
-                                    
-                                    if(balance-bettime*betChose.value>0){
-                                        Text("Spin")
-                                            .fixedSize()
-                                            .foregroundColor(.black)
-                                            .frame(width: CGFloat(2*howBig), height: CGFloat(howBig))
-                                            .background(Color.green)
-                                            .cornerRadius(100)
-                                            .onTapGesture {
-                                                if betChose.value>0{
-                                                    randSpin = .random(in: 0...37)
-                                                    countStart()
-                                                    pretables=tables
-                                                    startBet=1
-                                                    prebetChose=betChose
-                                                    DispatchQueue.main.asyncAfter(deadline: .now() + 5) {
-                                                        clear()
+                                    if(waiting==0){
+                                        if(balance-bettime*betChose.value>=0){
+                                            Text("Spin")
+                                                .fixedSize()
+                                                .foregroundColor(.black)
+                                                .frame(width: CGFloat(2*howBig), height: CGFloat(howBig))
+                                                .background(Color.green)
+                                                .cornerRadius(100)
+                                                .onTapGesture {
+                                                    if betChose.value>0{
+                                                        randSpin = .random(in: 0...37)
+                                                        countStart()
+                                                        pretables=tables
+                                                        startBet=1
+                                                        prebetChose=betChose
+                                                        waiting=1;
+                                                        
+                                                        DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
+                                                            clear()
+                                                            waiting=0
+                                                        }
+                                                        
                                                     }
                                                     
+                                    
+                                                    
                                                 }
-                                                
-                                
-                                                
-                                            }
+                                        }
+                                        else{
+                                            Text("⬅︎錢不夠喔")
+                                                .fixedSize()
+                                                .foregroundColor(.black)
+                                                .frame(width: CGFloat(2*howBig), height: CGFloat(howBig))
+                                                .background(Color.green)
+                                                .cornerRadius(100)
+                                                .onTapGesture {
+                                                    
+                                                }
+                                        }
                                     }
                                     else{
-                                        Text("⬅︎錢不夠喔")
+                                        Text("3秒查看結果")
                                             .fixedSize()
                                             .foregroundColor(.black)
-                                            .frame(width: CGFloat(2*howBig), height: CGFloat(howBig))
+                                            .frame(width: CGFloat(3*howBig), height: CGFloat(howBig))
                                             .background(Color.green)
                                             .cornerRadius(100)
-                                            .onTapGesture {
-                                                
-                                            }
+                                            
                                     }
                                 }
+                                
+                                    
                                 
                                 
                                 if(randSpin>=1 && randSpin<=36){
@@ -698,7 +772,24 @@ struct ContentView: View {
                     }
                     
                 }
+                if gameover==1{
+                    Text("GameOver👎👎 TapToRestart")
+                        .fixedSize()
+                        .foregroundColor(.white)
+                        .frame(width: CGFloat(10*howBig), height: CGFloat(4*howBig))
+                        .background(Color.green)
+                        .border(Color.black, width: 2)
+                        .border(Color.black, width: 2)
+                        .onTapGesture {
+                            balance=10000
+                            clear()
+                            randSpin = -1
+                            startBet=0;
+                            gameover=0
+                        }
                 }
+                
+            }
             
             
             
