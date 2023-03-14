@@ -17,6 +17,7 @@ struct Chip{
 }
 struct ContentView: View {
     @State private var tables = [
+    Table(value: 0, color: .white ,ismoney: 0),
     Table(value: 1, color: .red ,ismoney: 0),
     Table(value: 2, color: .black ,ismoney: 0),
     Table(value: 3, color: .red ,ismoney: 0),
@@ -68,30 +69,48 @@ struct ContentView: View {
     Table(value: 49, color: .purple ,ismoney: 0),
     Table(value: 50, color: .purple ,ismoney: 0),
     ]
+    @State private var pretables: [Table] = []
+        
+        init() {
+            pretables = tables
+        }
     @State private var chips=[
     Chip(value: 0, color: .gray),
     Chip(value: 1, color: .gray),
-    Chip(value: 5, color: .white),
-    Chip(value: 10, color: .blue),
-    Chip(value: 50, color: .orange)
+    Chip(value: 10, color: .white),
+    Chip(value: 100, color: .blue),
+    Chip(value: 500, color: .orange)
     ]
     var to46Set = Set([3,6,9,12,15,18,21,24,27,30,33,36])
     var to47Set = Set([2,5,8,11,14,17,20,23,26,29,32,35])
     var to48Set = Set([1,4,7,10,13,16,19,22,25,28,31,34])
-    @State private var balance:   Int = 1000
+    @State private var balance:   Int = 10000
     @State private var betChose = Chip(value: 0, color: .gray)
     @State private var tabChose = 0;
+    @State private var bettime = 0;
     @State var  randSpin = -1;
+    @State var  startBet = 0;
+    @State private var prebetChose = Chip(value: 0, color: .gray)
+        
+        
     func clear(){
-        tabChose=0
+        
+        for i in (1...50){
+            tables[i].ismoney=0;
+        }
+        bettime=0
         betChose = Chip(value: 0, color: .gray)
     }
     func countStart(){
+        var wintime=0;
         var  win = 0
         if tabChose >= 1 && tabChose <= 36{
             if(tabChose==randSpin){
                 balance+=betChose.value*35
-                win = 1
+                wintime += 1
+            }
+            else{
+                wintime-=1;
             }
         }else if tabChose == 37{
             if randSpin == 37{
@@ -140,6 +159,9 @@ struct ContentView: View {
             if randSpin >= 25 && randSpin <= 36{
                 balance+=betChose.value*2
                 win = 1
+            }
+            else{
+                
             }
         }
         else if tabChose == 45{
@@ -207,10 +229,13 @@ struct ContentView: View {
                                     .background(Color.green)
                                     .border(Color.black, width: 2)
                                     .onTapGesture {
-                                        tabChose = 37
+                                        if betChose.value>0{
+                                            tables[37].ismoney=1;
+                                            bettime+=1;
+                                        }
                                     }
-                                if tabChose == 37 && betChose.value>0 {
-                                    Image(systemName:"circle")
+                                if tables[37].ismoney==1 && betChose.value>0 {
+                                    Image(systemName:"circle.fill")
                                         .resizable()
                                         .frame(width: CGFloat(howBig), height: CGFloat(howBig))
                                         
@@ -231,10 +256,13 @@ struct ContentView: View {
                                     .background(Color.green)
                                     .border(Color.black, width: 2)
                                     .onTapGesture {
-                                        tabChose = 38
+                                        if betChose.value>0{
+                                            tables[38].ismoney=1;
+                                            bettime+=1;
+                                        }
                                     }
-                                if tabChose == 38 && betChose.value>0 {
-                                    Image(systemName:"circle")
+                                if tables[38].ismoney==1 && betChose.value>0 {
+                                    Image(systemName:"circle.fill")
                                         .resizable()
                                         .frame(width: CGFloat(howBig), height: CGFloat(howBig))
                                         
@@ -248,10 +276,10 @@ struct ContentView: View {
                             }
                         }
                         
-                        ForEach(0..<12){index in
+                        ForEach(0..<12){index in//0..<12
                             VStack(spacing: 0){
                                 ForEach(0..<3){jdex in
-                                    var now=tables[index*3+2-jdex]
+                                    let now=tables[index*3+3-jdex]
                                     ZStack(){
                                         
                                         Text("\(now.value)")
@@ -261,11 +289,14 @@ struct ContentView: View {
                                             .background(now.color)
                                             .border(Color.black, width: 2)
                                             .onTapGesture {
-                                                tabChose=now.value;
+                                                if betChose.value>0{
+                                                    tables[index*3+3-jdex].ismoney=1;
+                                                    bettime+=1;
+                                                }
                                             }
                                             
-                                        if tabChose == now.value && betChose.value>0 {
-                                            Image(systemName:"circle")
+                                        if tables[index*3+3-jdex].ismoney==1 && betChose.value>0 {
+                                            Image(systemName:"circle.fill")
                                                 .resizable()
                                                 .frame(width: CGFloat(howBig), height: CGFloat(howBig))
                                                 
@@ -291,10 +322,13 @@ struct ContentView: View {
                                         .background(Color.green)
                                         .border(Color.black, width: 2)
                                         .onTapGesture {
-                                            tabChose=39+i
+                                            if betChose.value>0{
+                                                tables[39+i].ismoney=1;
+                                                bettime+=1;
+                                            }
                                         }
-                                    if tabChose == 39+i && betChose.value>0 {
-                                        Image(systemName:"circle")
+                                    if tables[39+i].ismoney==1 && betChose.value>0 {
+                                        Image(systemName:"circle.fill")
                                             .resizable()
                                             .frame(width: CGFloat(howBig), height: CGFloat(howBig))
                                             
@@ -322,10 +356,13 @@ struct ContentView: View {
                                     .background(Color.green)
                                     .border(Color.black, width: 2)
                                     .onTapGesture {
-                                        tabChose = 41+i
+                                        if betChose.value>0{
+                                            tables[41+i].ismoney=1;
+                                            bettime+=1;
+                                        }
                                     }
-                                if tabChose == 41+i && betChose.value>0 {
-                                    Image(systemName:"circle")
+                                if tables[41+i].ismoney==1 && betChose.value>0 {
+                                    Image(systemName:"circle.fill")
                                         .resizable()
                                         .frame(width: CGFloat(howBig), height: CGFloat(howBig))
                                         
@@ -353,7 +390,7 @@ struct ContentView: View {
                                     tabChose = 45
                                 }
                             if tabChose == 45 && betChose.value>0 {
-                                Image(systemName:"circle")
+                                Image(systemName:"circle.fill")
                                     .resizable()
                                     .frame(width: CGFloat(howBig), height: CGFloat(howBig))
                                     
@@ -376,7 +413,7 @@ struct ContentView: View {
                                     tabChose = 46
                                 }
                             if tabChose == 46 && betChose.value>0 {
-                                Image(systemName:"circle")
+                                Image(systemName:"circle.fill")
                                     .resizable()
                                     .frame(width: CGFloat(howBig), height: CGFloat(howBig))
                                     
@@ -399,7 +436,7 @@ struct ContentView: View {
                                     tabChose = 47
                                 }
                             if tabChose == 47 && betChose.value>0 {
-                                Image(systemName:"circle")
+                                Image(systemName:"circle.fill")
                                     .resizable()
                                     .frame(width: CGFloat(howBig), height: CGFloat(howBig))
                                     
@@ -421,7 +458,7 @@ struct ContentView: View {
                                     tabChose = 48
                                 }
                             if tabChose == 48 && betChose.value>0 {
-                                Image(systemName:"circle")
+                                Image(systemName:"circle.fill")
                                     .resizable()
                                     .frame(width: CGFloat(howBig), height: CGFloat(howBig))
                                     
@@ -444,7 +481,7 @@ struct ContentView: View {
                                     tabChose = 49
                                 }
                             if tabChose == 49 && betChose.value>0 {
-                                Image(systemName:"circle")
+                                Image(systemName:"circle.fill")
                                     .resizable()
                                     .frame(width: CGFloat(howBig), height: CGFloat(howBig))
                                     
@@ -467,7 +504,7 @@ struct ContentView: View {
                                     tabChose = 50
                                 }
                             if tabChose == 50 && betChose.value>0 {
-                                Image(systemName:"circle")
+                                Image(systemName:"circle.fill")
                                     .resizable()
                                     .frame(width: CGFloat(howBig), height: CGFloat(howBig))
                                     
@@ -484,14 +521,14 @@ struct ContentView: View {
                     HStack(){
                         VStack{
                             HStack{
-                                Text("你有的錢錢:\(balance)-\(betChose.value)")
+                                Text("你有的錢錢:\(balance)")
                                     .fixedSize()
                                     .foregroundColor(.black)
                                     .frame(width: CGFloat(3*howBig), height: CGFloat(howBig))
                                     .onTapGesture {
                                         
                                     }
-                                Text("你輸或贏了:\(balance-1000)")
+                                Text("Total Bet:\(bettime*betChose.value)")
                                     .fixedSize()
                                     .foregroundColor(.black)
                                     .frame(width: CGFloat(3*howBig), height: CGFloat(howBig))
@@ -518,7 +555,8 @@ struct ContentView: View {
                                     .onTapGesture {
                                         balance=1000
                                         clear()
-                                        randSpin = 0
+                                        randSpin = -1
+                                        startBet=0;
                                     }
                                 Text("clear")
                                     .fixedSize()
@@ -529,23 +567,65 @@ struct ContentView: View {
                                     .onTapGesture {
                                         clear();
                                     }
-                                Text("Spin")
-                                    .fixedSize()
-                                    .foregroundColor(.black)
-                                    .frame(width: CGFloat(2*howBig), height: CGFloat(howBig))
-                                    .background(Color.green)
-                                    .cornerRadius(100)
-                                    .onTapGesture {
-                                        if betChose.value>0{
-                                            randSpin = .random(in: 0...37)
-                                            countStart()
-                                            
-                                            clear()
-                                        }
-                                        
-                        
-                                        
+                                VStack{
+                                    if(startBet > 0){
+                                        Text("rebet")
+                                            .fixedSize()
+                                            .foregroundColor(.black)
+                                            .frame(width: CGFloat(2*howBig), height: CGFloat(howBig))
+                                            .background(Color.yellow)
+                                            .cornerRadius(100)
+                                            .onTapGesture {
+                                                betChose=prebetChose
+                                                tables=pretables
+                                                var c=0;
+                                                for i in 1...50{
+                                                    c+=tables[i].ismoney
+                                                }
+                                                bettime=c
+                                                
+                                                
+                                            }
                                     }
+                                    
+                                    if(balance-bettime*betChose.value>0){
+                                        Text("Spin")
+                                            .fixedSize()
+                                            .foregroundColor(.black)
+                                            .frame(width: CGFloat(2*howBig), height: CGFloat(howBig))
+                                            .background(Color.green)
+                                            .cornerRadius(100)
+                                            .onTapGesture {
+                                                if betChose.value>0{
+                                                    randSpin = .random(in: 0...37)
+                                                    countStart()
+                                                    pretables=tables
+                                                    startBet=1
+                                                    prebetChose=betChose
+                                                    DispatchQueue.main.asyncAfter(deadline: .now() + 5) {
+                                                        clear()
+                                                    }
+                                                    
+                                                }
+                                                
+                                
+                                                
+                                            }
+                                    }
+                                    else{
+                                        Text("⬅︎錢不夠喔")
+                                            .fixedSize()
+                                            .foregroundColor(.black)
+                                            .frame(width: CGFloat(2*howBig), height: CGFloat(howBig))
+                                            .background(Color.green)
+                                            .cornerRadius(100)
+                                            .onTapGesture {
+                                                
+                                            }
+                                    }
+                                }
+                                
+                                
                                 if(randSpin>=1 && randSpin<=36){
                                     Text("\(randSpin)!!")
                                         .fixedSize()
@@ -592,7 +672,7 @@ struct ContentView: View {
                         }
                         ForEach(1..<5){ i in
                             ZStack{
-                                Image(systemName:"circle")
+                                Image(systemName:"circle.fill")
                                     .resizable()
                                     .frame(width: CGFloat(2*howBig), height: CGFloat(2*howBig))
                                     
